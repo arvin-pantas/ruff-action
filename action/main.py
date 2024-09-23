@@ -6,8 +6,10 @@ import shlex
 import subprocess
 import sys
 from pathlib import Path
+from typing import Union
 
 ACTION_PATH = Path(os.environ["GITHUB_ACTION_PATH"])
+GITHUB_WORKSPACE = Path(os.environ["GITHUB_WORKSPACE"])
 ARGS = os.getenv("INPUT_ARGS", default="")
 SRC = os.getenv("INPUT_SRC", default="")
 
@@ -96,7 +98,7 @@ def read_version_from_pyproject() -> str:
     return version
 
 
-def find_version_in_array(array: object) -> str | None:
+def find_version_in_array(array: object) -> Union[str, None]:
     """Find the version specifier in an array of dependencies."""
     if not isinstance(array, list):
         return None
@@ -185,7 +187,7 @@ proc = subprocess.run(
     ],
     stdout=subprocess.PIPE,
     stderr=subprocess.STDOUT,
-    cwd=ACTION_PATH,
+    cwd=GITHUB_WORKSPACE,
     encoding="utf-8",
     check=False,
 )
